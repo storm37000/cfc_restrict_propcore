@@ -1,10 +1,11 @@
--- Propcore is allowed to everyone, but functions in the restricted_functions array will be restricted to devotee+ only
+-- Propcore is allowed to everyone, but functions in the restrictedFunctions array will be restricted to devotee+ only
 
-function restrict_propcore_functions()
-    local disallowed_ranks = {}
-    disallowed_ranks["user", "regular"] = true
+local function restrictPropCoreFunctions()
+    local disallowedRanks = {}
+    disallowedRanks["user"] = true
+    disallowedRanks["regular"] = true
 
-    local restricted_functions = {
+    local restrictedFunctions = {
         "propSpawn(sn)",
         "propSpawn(en)",
         "propSpawn(svn)",
@@ -21,23 +22,23 @@ function restrict_propcore_functions()
         --"propBreak(e:)"
     }
 
-    for k, sig in pairs( restricted_functions ) do
-        local old_func = wire_expression2_funcs[sig][3]
+    for _, signature in pairs( restrictedFunctions ) do
+        local oldFunc = wire_expression2_funcs[signature][3]
 
-        wire_expression2_funcs[sig][3] = function( self, ... )
-            if ( disallowed_ranks[self.player:GetUserGroup()] == nil ) then
+        wire_expression2_funcs[signature][3] = function( self, ... )
+            if ( disallowedRanks[self.player:GetUserGroup()] == nil ) then
                 local isInBuildMode = self.player:GetNWBool("PVPMode", false) == false
 
                 if( isInBuildMode or self.player:IsAdmin() ) then
-                    return old_func( self, ... )
+                    return oldFunc( self, ... )
                 else
                     self.player:ChatPrint( "You can't use PropCore in PvP mode" )
                 end
             else
-                self.player:ChatPrint( "You don't have access to " .. sig )
+                self.player:ChatPrint( "You don't have access to " .. signature )
             end
         end
     end
 end
 
-hook.Add( "OnGamemodeLoaded","propCoreRestrict", restrict_propcore_functions )
+hook.Add( "OnGamemodeLoaded","propCoreRestrict", restrictPropCoreFunctions )
