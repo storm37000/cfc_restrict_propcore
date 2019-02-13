@@ -1,5 +1,7 @@
 -- Propcore is allowed to everyone, but functions in the restrictedFunctions array will be restricted to devotee+ only
 
+wire_expression2_funcs = wire_expression2_funcs or {}
+
 local function restrictPropCoreFunctions()
     local disallowedRanks = {}
     disallowedRanks["user"] = true
@@ -23,21 +25,19 @@ local function restrictPropCoreFunctions()
     }
 
     for _, signature in pairs( restrictedFunctions ) do
-        if wire_expression2_funcs then
-            local oldFunc = wire_expression2_funcs[signature][3]
+        local oldFunc = wire_expression2_funcs[signature][3]
 
-            wire_expression2_funcs[signature][3] = function( self, ... )
-                if ( disallowedRanks[self.player:GetUserGroup()] == nil ) then
-                    local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
+        wire_expression2_funcs[signature][3] = function( self, ... )
+            if ( disallowedRanks[self.player:GetUserGroup()] == nil ) then
+                local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
 
-                    if( isInBuildMode or self.player:IsAdmin() ) then
-                        return oldFunc( self, ... )
-                    else
-                        self.player:ChatPrint( "You can't use PropCore in PvP mode" )
-                    end
+                if( isInBuildMode or self.player:IsAdmin() ) then
+                    return oldFunc( self, ... )
                 else
-                    self.player:ChatPrint( "You don't have access to " .. signature )
+                    self.player:ChatPrint( "You can't use PropCore in PvP mode" )
                 end
+            else
+                self.player:ChatPrint( "You don't have access to " .. signature )
             end
         end
     end
