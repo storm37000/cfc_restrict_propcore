@@ -12,7 +12,7 @@ local function saveWhitelistChanges()
     file.Write(file_name..".txt", util.TableToJSON(whitelistTable, true))
 end
 
-local function addPlayerToPropcoreWhitelist(players)
+function addPlayerToPropcoreWhitelist(players)
     for _, ply in pairs(players) do
         table.insert(whitelistTable, ply:steamID())
     end
@@ -20,7 +20,7 @@ local function addPlayerToPropcoreWhitelist(players)
     saveWhitelistChanges()
 end
 
-local function removePlayerFromPropcoreWhitelist(players)
+function removePlayerFromPropcoreWhitelist(players)
     for _, ply in pairs(players) do
         table.RemoveByValue(whitelistTable, ply:steamID())
     end
