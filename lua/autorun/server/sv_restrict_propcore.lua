@@ -1,11 +1,11 @@
 -- Propcore is allowed to everyone, but functions in the restrictedFunctions array will be restricted to devotee+ only
 local file_name = "cfc_propcore_whitelist"
-local whitelistTable = {}
+local whitelistTable = whitelistTable or {}
 
 if not file.Exists(file_name..".txt", "DATA") then
     file.Write(file_name..".txt", "") --Creates new data file
 else
-    whitelistTable = util.JSONToTable(file.Read(file_name..".txt"))
+    whitelistTable = util.JSONToTable(file.Read(file_name..".txt")) or {}
 end
 
 local function saveWhitelistChanges()
@@ -14,7 +14,7 @@ end
 
 function addPlayerToPropcoreWhitelist(players)
     for _, ply in pairs(players) do
-        table.insert(whitelistTable, ply:steamID())
+        table.insert(whitelistTable, ply:SteamID())
     end
 
     saveWhitelistChanges()
@@ -22,14 +22,14 @@ end
 
 function removePlayerFromPropcoreWhitelist(players)
     for _, ply in pairs(players) do
-        table.RemoveByValue(whitelistTable, ply:steamID())
+        table.RemoveByValue(whitelistTable, ply:SteamID())
     end
 
     saveWhitelistChanges()
 end
 
-local function isPlayerWhitelisted(player)
-    return table.HasValue(whitelistTable, player:steamID())
+function isPlayerWhitelisted(ply)
+    return table.HasValue(whitelistTable, ply:SteamID())
 end
 
 local function restrictPropCoreFunctions()

@@ -1,19 +1,19 @@
 CATEGORY_NAME = "CFC"
 
 local function addToWhitelist(callingPlayer, targetPlayers)
-    local affeceted_plys = {}
+    local affected_plys = {}
 
     for _, ply in pairs(targetPlayers) do
-        local isPlyWhitelisted = isWhitelistedPly(ply)
+        local isPlyWhitelisted = isPlayerWhitelisted(ply)
 
-        if not isPlyWhitelisted then 
+        if isPlyWhitelisted then 
             ULib.tsayError(callingPlayer, ply:Name().." is already whitelisted!", true)
         else
             table.insert(affected_plys, ply)
         end
     end
 
-    addPlayersToPropcoreWhitelist(affeceted_plys)
+    addPlayerToPropcoreWhitelist(affected_plys)
     ulx.fancyLogAdmin(callingPlayer, true, "#A added #T to the propcore whitelist", affected_plys)
 end
 
@@ -23,10 +23,10 @@ PCWhitelist:defaultAccess(ULib.ACCESS_ADMIN)
 PCWhitelist:help("Adds specified target(s) to a propcore whitelist")
 
 local function removeFromWhitelist(callingPlayer, targetPlayers)
-    local affeceted_plys = {}
+    local affected_plys = {}
 
     for _, ply in pairs(targetPlayers) do
-        local isPlyWhitelisted = isWhitelistedPly(ply)
+        local isPlyWhitelisted = isPlayerWhitelisted(ply)
 
         if not isPlyWhitelisted then 
             ULib.tsayError(callingPlayer, ply:Name().." is not whitelisted!", true)
@@ -35,7 +35,7 @@ local function removeFromWhitelist(callingPlayer, targetPlayers)
         end
     end
 
-    removePlayerFromPropcoreWhitelist(affeceted_plys)
+    removePlayerFromPropcoreWhitelist(affected_plys)
     ulx.fancyLogAdmin(callingPlayer, true, "#A removed #T from the propcore whitelist", affected_plys)
 end
 
