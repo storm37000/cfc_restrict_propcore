@@ -1,35 +1,40 @@
 -- Propcore is allowed to everyone, but functions in the restrictedFunctions array will be restricted to devotee+ only
 local file_name = "cfc_propcore_whitelist"
-local whitelistTable = whitelistTable or {}
+local whitelistedPlayers = whitelistedPlayers or {}
 
-if not file.Exists(file_name..".txt", "DATA") then
-    file.Write(file_name..".txt", "") --Creates new data file
+if not file.Exists( file_name .. ".txt", "DATA") then
+    --Creating new data file
+    file.Write( file_name .. ".txt", "" )
 else
-    whitelistTable = util.JSONToTable(file.Read(file_name..".txt")) or {}
+    local fileContents = file.Read( file_name .. ".txt" )
+    local translated = util.JSONToTable( fileContents )
+    whitelistedPlayers = translated or {}
 end
 
 local function saveWhitelistChanges()
-    file.Write(file_name..".txt", util.TableToJSON(whitelistTable, true))
+    local translated = util.TableToJSON( whitelistedPlayers, true )
+
+    file.Write( file_name .. ".txt", translated )
 end
 
-function addPlayerToPropcoreWhitelist(players)
-    for _, ply in pairs(players) do
-        table.insert(whitelistTable, ply:SteamID())
+function addPlayersToPropcoreWhitelist( players )
+    for _, ply in pairs( players ) do
+        table.insert( whitelistedPlayers, ply:SteamID() )
     end
 
     saveWhitelistChanges()
 end
 
-function removePlayerFromPropcoreWhitelist(players)
-    for _, ply in pairs(players) do
-        table.RemoveByValue(whitelistTable, ply:SteamID())
+function removePlayersFromPropcoreWhitelist( players )
+    for _, ply in pairs( players ) do
+        table.RemoveByValue( whitelistedPlayers, ply:SteamID() )
     end
 
     saveWhitelistChanges()
 end
 
-function isPlayerWhitelisted(ply)
-    return table.HasValue(whitelistTable, ply:SteamID())
+function isPlayerWhitelisted( ply )
+    return table.HasValue( whitelistedPlayers, ply:SteamID() )
 end
 
 local function restrictPropCoreFunctions()
@@ -58,7 +63,7 @@ local function restrictPropCoreFunctions()
         local oldFunc = wire_expression2_funcs[signature][3]
 
         wire_expression2_funcs[signature][3] = function( self, ... )
-            if ( disallowedRanks[self.player:GetUserGroup()] == nil or isPlayerWhitelisted(self.player) ) then
+            if ( disallowedRanks[self.player:GetUserGroup()] == nil or isPlayerWhitelisted( self.player ) ) then
                 local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
 
                 if( isInBuildMode or self.player:IsAdmin() ) then
