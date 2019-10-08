@@ -1,6 +1,6 @@
 -- Propcore is allowed to everyone, but functions in the restrictedFunctions array will be restricted to devotee+ only
 
-local function restrictPropCoreFunctions()
+function restrictPropCoreFunctions()
     local disallowedRanks = {}
     disallowedRanks["user"] = true
     disallowedRanks["regular"] = true
@@ -42,7 +42,5 @@ local function restrictPropCoreFunctions()
         end
     end
 end
-
-
 
 hook.Add( "OnGamemodeLoaded","propCoreRestrict", restrictPropCoreFunctions )
