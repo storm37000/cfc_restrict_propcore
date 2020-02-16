@@ -16,7 +16,7 @@ function restrictPropCoreFunctions()
         "propSpawn(evan)",
         "seatSpawn(sn)",
         "seatSpawn(svan)",
-        "setPos(e:v)",
+        "setPos(e:v)", -- Test
         "reposition(e:v)",
         "propManipulate(e:vannn)"
         --"propBreak(e:)"
