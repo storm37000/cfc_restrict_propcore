@@ -22,7 +22,7 @@ function restrictPropCoreFunctions()
         --"propBreak(e:)"
     }
     local adminOnlyFunctions = {
-        "use(e:)"   
+        "use(e:)"
     }
     for _, signature in pairs( restrictedFunctions ) do
         if wire_expression2_funcs then
@@ -43,7 +43,7 @@ function restrictPropCoreFunctions()
             end
         end
     end
-    
+
     for _, signature in pairs( adminOnlyFunctions ) do
         if wire_expression2_funcs then
             local oldFunc = wire_expression2_funcs[signature][3]
