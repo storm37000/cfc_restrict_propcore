@@ -22,6 +22,7 @@ function restrictPropCoreFunctions()
         --"propBreak(e:)"
     }
 
+
     local adminOnlyFunctions = {
         "use(e:)"
     }
@@ -63,4 +64,3 @@ function restrict( signatures, condition )
     end
 end
 
-hook.Add( "OnGamemodeLoaded","propCoreRestrict", restrictPropCoreFunctions )
