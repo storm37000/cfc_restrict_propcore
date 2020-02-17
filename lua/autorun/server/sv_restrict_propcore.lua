@@ -56,3 +56,4 @@ function restrictPropCoreFunctions()
 end
 
 hook.Add( "OnGamemodeLoaded","propCoreRestrict", restrictPropCoreFunctions )
+end -- I don't know why this needs to be here.
