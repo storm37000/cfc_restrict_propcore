@@ -38,7 +38,7 @@ function CFCPropcoreRestrict.playerIsWhitelisted( ply )
     return whitelistedPlayers[ply:SteamID()] ~= nil
 end
 
-local function restrictPropCoreFunctions()
+function restrictPropCoreFunctions()
     local disallowedRanks = {}
     disallowedRanks["user"] = true
     disallowedRanks["regular"] = true
@@ -61,19 +61,21 @@ local function restrictPropCoreFunctions()
     }
 
     for _, signature in pairs( restrictedFunctions ) do
-        local oldFunc = wire_expression2_funcs[signature][3]
+        if wire_expression2_funcs then
+            local oldFunc = wire_expression2_funcs[signature][3]
 
-        wire_expression2_funcs[signature][3] = function( self, ... )
-            if disallowedRanks[self.player:GetUserGroup()] == nil or CFCPropcoreRestrict.playerIsWhitelisted( self.player ) then
-                local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
+            wire_expression2_funcs[signature][3] = function( self, ... )
+                if disallowedRanks[self.player:GetUserGroup()] == nil or CFCPropcoreRestrict.playerIsWhitelisted( self.player ) then
+                    local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
 
-                if isInBuildMode or self.player:IsAdmin() then
-                    return oldFunc( self, ... )
+                    if isInBuildMode or self.player:IsAdmin() then
+                        return oldFunc( self, ... )
+                    else
+                        self.player:ChatPrint( "You can't use PropCore in PvP mode" )
+                    end
                 else
-                    self.player:ChatPrint( "You can't use PropCore in PvP mode" )
+                    self.player:ChatPrint( "You don't have access to " .. signature )
                 end
-            else
-                self.player:ChatPrint( "You don't have access to " .. signature )
             end
         end
     end
