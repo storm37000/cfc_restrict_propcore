@@ -33,7 +33,7 @@ function removePlayersFromPropcoreWhitelist( players )
     saveWhitelistChanges()
 end
 
-function isPlayerWhitelisted( ply )
+function playerIsWhitelisted( ply )
     return table.HasValue( whitelistedPlayers, ply:SteamID() )
 end
 
@@ -63,7 +63,7 @@ local function restrictPropCoreFunctions()
         local oldFunc = wire_expression2_funcs[signature][3]
 
         wire_expression2_funcs[signature][3] = function( self, ... )
-            if ( disallowedRanks[self.player:GetUserGroup()] == nil or isPlayerWhitelisted( self.player ) ) then
+            if ( disallowedRanks[self.player:GetUserGroup()] == nil or playerIsWhitelisted( self.player ) ) then
                 local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
 
                 if( isInBuildMode or self.player:IsAdmin() ) then

@@ -4,7 +4,7 @@ local function addToWhitelist( callingPlayer, targetPlayers )
     local affected_plys = {}
 
     for _, ply in pairs( targetPlayers ) do
-        local isPlyWhitelisted = isPlayerWhitelisted( ply )
+        local isPlyWhitelisted = playerIsWhitelisted( ply )
 
         if isPlyWhitelisted then 
             ULib.tsayError( callingPlayer, ply:Name() .. " is already whitelisted!", true )
@@ -26,7 +26,7 @@ local function removeFromWhitelist( callingPlayer, targetPlayers )
     local affected_plys = {}
 
     for _, ply in pairs( targetPlayers ) do
-        local isPlyWhitelisted = isPlayerWhitelisted( ply )
+        local isPlyWhitelisted = playerIsWhitelisted( ply )
 
         if not isPlyWhitelisted then 
             ULib.tsayError( callingPlayer, ply:Name() .. " is not whitelisted!", true )
