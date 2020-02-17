@@ -27,10 +27,12 @@ function restrictPropCoreFunctions()
     }
 
     restrict( restrictedFunctions, function( self,  ... )
+        local isInPvP = self.player:GetNWBool( "CFC_Pvp_Mode" )
+
         if disallowedRanks[self.player:GetUserGroup()] then
             return false, "You don't have access to this function"
-        elseif self.player:GetNWBool( "CFC_PvP_Mode" ) == true then
-            return false, "You can't use propcore in PvP"
+        elseif isInPvP == true then
+             return false, "You can't use propcore in PvP"
         else
             return true
         end
