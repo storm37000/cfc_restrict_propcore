@@ -2,7 +2,7 @@
 local file_name = "cfc_propcore_whitelist"
 local whitelistedPlayers = whitelistedPlayers or {}
 
-if not file.Exists( file_name .. ".txt", "DATA") then
+if not file.Exists( file_name .. ".txt", "DATA" ) then
     --Creating new data file
     file.Write( file_name .. ".txt", "" )
 else
