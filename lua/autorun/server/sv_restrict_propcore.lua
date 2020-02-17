@@ -44,7 +44,7 @@ function restrictPropCoreFunctions()
         end
     end
 
-    for _, signature in pairs( adminOnlyFunctions ) do 
+    for _, signature in pairs( adminOnlyFunctions ) do
         local oldFunc = wire_expression2_funcs[signature][3]
            wire_expression2_funcs[signature][3] = function( self, ... )
            if ( self.player:IsAdmin() ) then
