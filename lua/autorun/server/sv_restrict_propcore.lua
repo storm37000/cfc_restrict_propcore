@@ -43,4 +43,3 @@ function restrictPropCoreFunctions()
     end
 end
 
-hook.Add( "OnGamemodeLoaded","propCoreRestrict", restrictPropCoreFunctions )
