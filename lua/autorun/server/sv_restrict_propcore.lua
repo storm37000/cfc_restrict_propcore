@@ -26,32 +26,39 @@ function restrictPropCoreFunctions()
         "use(e:)"
     }
 
-    for _, signature in pairs( restrictedFunctions ) do
+    restrict( restrictedFunctions, function( self,  ... )
+        if disallowedRanks[self.player:GetUserGroup()] then
+            return false, "You don't have access to this function"
+        elseif self.player:GetNWBool( "CFC_PvP_Mode" ) == true then
+            return false, "You can't use propcore in PvP"
+        else
+            return true
+        end
+    end)
+
+    restrict( adminOnlyFunctions, function( self, ...)
+        if self.player:IsAdmin() then
+            return true
+        else
+            return false, "Only Admins can use this function"
+        end
+    end)
+end
+
+
+
+function restrict( signatures, condition )
+    for _, signature in pairs( signatures ) do
         local oldFunc = wire_expression2_funcs[signature][3]
 
         wire_expression2_funcs[signature][3] = function( self, ... )
-            if disallowedRanks[self.player:GetUserGroup()] == nil then
-                local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
+            canRun, err = condition( self, ... )
 
-                if isInBuildMode or self.player:IsAdmin() then
-                    return oldFunc( self, ... )
-                else
-                    self.player:ChatPrint( "You can't use PropCore in PvP mode" )
-                end
-            else
-                self.player:ChatPrint( "You don't have access to " .. signature )
-            end
-        end
-    end
-
-    for _, signature in pairs( adminOnlyFunctions ) do
-        local oldFunc = wire_expression2_funcs[signature][3]
-           wire_expression2_funcs[signature][3] = function( self, ... )
-           if ( self.player:IsAdmin() ) then
+            if canRun then
                 return oldFunc( self, ... )
-           else
-                self.player:ChatPrint( "You don't have access to " .. signature )
-           end
+            else
+                self.player:ChatPrint( err )                
+            end
         end
     end
 end
