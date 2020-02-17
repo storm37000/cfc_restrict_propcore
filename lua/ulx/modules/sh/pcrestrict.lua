@@ -1,4 +1,4 @@
-CATEGORY_NAME = "CFC"
+local CATEGORY_NAME = "User Management"
 
 local function addToWhitelist( callingPlayer, targetPlayers, should_remove )
     local affected_plys = {}
