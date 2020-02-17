@@ -57,7 +57,7 @@ function restrict( signatures, condition )
             if canRun then
                 return oldFunc( self, ... )
             else
-                self.player:ChatPrint( err )                
+                self.player:ChatPrint( err )               
             end
         end
     end
