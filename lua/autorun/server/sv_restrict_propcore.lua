@@ -19,7 +19,7 @@ end
 
 function addPlayersToPropcoreWhitelist( players )
     for _, ply in pairs( players ) do
-        table.insert( whitelistedPlayers, ply:SteamID() )
+        whitelistedPlayers[ply:SteamID()] = true
     end
 
     saveWhitelistChanges()
@@ -27,14 +27,14 @@ end
 
 function removePlayersFromPropcoreWhitelist( players )
     for _, ply in pairs( players ) do
-        table.RemoveByValue( whitelistedPlayers, ply:SteamID() )
+        whitelistedPlayers[ply:SteamID()] = nil
     end
 
     saveWhitelistChanges()
 end
 
 function playerIsWhitelisted( ply )
-    return table.HasValue( whitelistedPlayers, ply:SteamID() )
+    return whitelistedPlayers[ply:SteamID()] ~= nil
 end
 
 local function restrictPropCoreFunctions()
