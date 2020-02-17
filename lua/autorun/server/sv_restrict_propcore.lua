@@ -29,7 +29,7 @@ function restrictPropCoreFunctions()
             local oldFunc = wire_expression2_funcs[signature][3]
 
             wire_expression2_funcs[signature][3] = function( self, ... )
-                if ( disallowedRanks[self.player:GetUserGroup()] == nil ) then
+                if disallowedRanks[self.player:GetUserGroup()] == nil then
                     local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
 
                     if isInBuildMode or self.player:IsAdmin() then
@@ -41,18 +41,15 @@ function restrictPropCoreFunctions()
                     self.player:ChatPrint( "You don't have access to " .. signature )
                 end
             end
-        end
-    end
 
-    for _, signature in pairs( adminOnlyFunctions ) do
-        if wire_expression2_funcs then
-            local oldFunc = wire_expression2_funcs[signature][3]
-               wire_expression2_funcs[signature][3] = function( self, ... )
-               if ( self.player:IsAdmin() ) then
-                    return oldFunc( self, ... )
-               else
-                    self.player:ChatPrint( "You don't have access to " .. signature )
-               end
+
+            wire_expression2_funcs[signature][3] = function( self, ... )
+                if not self.player:IsAdmin() then self.player:ChatPrint( "You don't have access to" .. signature )
+                if not self.player:IsAdmin() then return end
+
+                local oldFunc = wire_expression2_funcs[signature][3]
+
+                return oldFunc( self, ... )
             end
         end
     end
