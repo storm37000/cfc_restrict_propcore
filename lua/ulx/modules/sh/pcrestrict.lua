@@ -4,7 +4,7 @@ local function addToWhitelist( callingPlayer, targetPlayers )
     local affected_plys = {}
 
     for _, ply in pairs( targetPlayers ) do
-        local isPlyWhitelisted = playerIsWhitelisted( ply )
+        local isPlyWhitelisted = CFCPropcoreRestrict.playerIsWhitelisted( ply )
 
         if isPlyWhitelisted then 
             ULib.tsayError( callingPlayer, ply:Name() .. " is already whitelisted!", true )
@@ -13,7 +13,7 @@ local function addToWhitelist( callingPlayer, targetPlayers )
         end
     end
 
-    addPlayersToPropcoreWhitelist( affected_plys )
+    CFCPropcoreRestrict.addPlayersToPropcoreWhitelist( affected_plys )
     ulx.fancyLogAdmin( callingPlayer, true, "#A added #T to the propcore whitelist", affected_plys )
 end
 
@@ -26,7 +26,7 @@ local function removeFromWhitelist( callingPlayer, targetPlayers )
     local affected_plys = {}
 
     for _, ply in pairs( targetPlayers ) do
-        local isPlyWhitelisted = playerIsWhitelisted( ply )
+        local isPlyWhitelisted = CFCPropcoreRestrict.playerIsWhitelisted( ply )
 
         if not isPlyWhitelisted then 
             ULib.tsayError( callingPlayer, ply:Name() .. " is not whitelisted!", true )
@@ -35,7 +35,7 @@ local function removeFromWhitelist( callingPlayer, targetPlayers )
         end
     end
 
-    removePlayersFromPropcoreWhitelist( affected_plys )
+    CFCPropcoreRestrict.removePlayersFromPropcoreWhitelist( affected_plys )
     ulx.fancyLogAdmin( callingPlayer, true, "#A removed #T from the propcore whitelist", affected_plys )
 end
 

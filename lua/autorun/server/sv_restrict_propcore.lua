@@ -1,6 +1,7 @@
 -- Propcore is allowed to everyone, but functions in the restrictedFunctions array will be restricted to devotee+ only
 local file_name = "cfc_propcore_whitelist"
 local whitelistedPlayers = whitelistedPlayers or {}
+CFCPropcoreRestrict = CFCPropcoreRestrict or {}
 
 if not file.Exists( file_name .. ".txt", "DATA" ) then
     --Creating new data file
@@ -17,7 +18,7 @@ local function saveWhitelistChanges()
     file.Write( file_name .. ".txt", translated )
 end
 
-function addPlayersToPropcoreWhitelist( players )
+function CFCPropcoreRestrict.addPlayersToPropcoreWhitelist( players )
     for _, ply in pairs( players ) do
         whitelistedPlayers[ply:SteamID()] = true
     end
@@ -25,7 +26,7 @@ function addPlayersToPropcoreWhitelist( players )
     saveWhitelistChanges()
 end
 
-function removePlayersFromPropcoreWhitelist( players )
+function CFCPropcoreRestrict.removePlayersFromPropcoreWhitelist( players )
     for _, ply in pairs( players ) do
         whitelistedPlayers[ply:SteamID()] = nil
     end
@@ -33,7 +34,7 @@ function removePlayersFromPropcoreWhitelist( players )
     saveWhitelistChanges()
 end
 
-function playerIsWhitelisted( ply )
+function CFCPropcoreRestrict.playerIsWhitelisted( ply )
     return whitelistedPlayers[ply:SteamID()] ~= nil
 end
 
@@ -63,7 +64,7 @@ local function restrictPropCoreFunctions()
         local oldFunc = wire_expression2_funcs[signature][3]
 
         wire_expression2_funcs[signature][3] = function( self, ... )
-            if ( disallowedRanks[self.player:GetUserGroup()] == nil or playerIsWhitelisted( self.player ) ) then
+            if ( disallowedRanks[self.player:GetUserGroup()] == nil or CFCPropcoreRestrict.playerIsWhitelisted( self.player ) ) then
                 local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
 
                 if( isInBuildMode or self.player:IsAdmin() ) then
