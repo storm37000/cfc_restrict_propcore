@@ -66,6 +66,7 @@ function restrictPropCoreFunctions()
 
             wire_expression2_funcs[signature][3] = function( self, ... )
                 if disallowedRanks[self.player:GetUserGroup()] == nil or CFCPropcoreRestrict.playerIsWhitelisted( self.player ) then
+
                     local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
 
                     if isInBuildMode or self.player:IsAdmin() then
@@ -81,4 +82,3 @@ function restrictPropCoreFunctions()
     end
 end
 
-hook.Add( "OnGamemodeLoaded","propCoreRestrict", restrictPropCoreFunctions )
