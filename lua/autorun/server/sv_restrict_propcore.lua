@@ -37,7 +37,7 @@ function restrictPropCoreFunctions()
         else
             return true
         end
-    end)
+    end )
 
     restrict( adminOnlyFunctions, function( self, ...)
         if self.player:IsAdmin() then
