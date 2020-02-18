@@ -1,13 +1,13 @@
 -- Propcore is allowed to everyone, but functions in the restrictedFunctions array will be restricted to devotee+ only
-local file_name = "cfc_propcore_whitelist"
+local cfc_propcore_file_name = "cfc_propcore_whitelist"
 local whitelistedPlayers = whitelistedPlayers or {}
 CFCPropcoreRestrict = CFCPropcoreRestrict or {}
 
-if not file.Exists( file_name .. ".txt", "DATA" ) then
+if not file.Exists( cfc_propcore_file_name .. ".txt", "DATA" ) then
     --Creating new data file
-    file.Write( file_name .. ".txt", "" )
+    file.Write( cfc_propcore_file_name .. ".txt", "" )
 else
-    local fileContents = file.Read( file_name .. ".txt" )
+    local fileContents = file.Read( cfc_propcore_file_name .. ".txt" )
     local translated = util.JSONToTable( fileContents )
     whitelistedPlayers = translated or {}
 end
@@ -15,7 +15,7 @@ end
 local function saveWhitelistChanges()
     local translated = util.TableToJSON( whitelistedPlayers, true )
 
-    file.Write( file_name .. ".txt", translated )
+    file.Write( cfc_propcore_file_name .. ".txt", translated )
 end
 
 function CFCPropcoreRestrict.addPlayersToPropcoreWhitelist( players )
