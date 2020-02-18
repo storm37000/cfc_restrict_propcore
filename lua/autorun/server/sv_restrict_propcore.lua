@@ -45,7 +45,7 @@ function restrictPropCoreFunctions()
         else
             return false, "Only Admins can use this function"
         end
-    end)
+    end )
 end
 
 
@@ -65,4 +65,3 @@ function restrict( signatures, condition )
         end
     end
 end
-
