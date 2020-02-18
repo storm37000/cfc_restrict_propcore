@@ -63,9 +63,7 @@ local function restrict( signatures, condition )
 end
 
 function restrictPropCoreFunctions()
-
     restrict( restrictedFunctions, restrictedCondition )
     restrict( adminOnlyFunctions, adminOnlyCondition )
 end
-
 
