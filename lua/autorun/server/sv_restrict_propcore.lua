@@ -31,10 +31,19 @@ function restrictPropCoreFunctions()
     restrict( adminOnlyFunctions, adminOnlyCondition( self, ... ) )
 end
 
+
 local function adminOnlyCondition( self, ... ) 
 	if self.player:IsAdmin() then
 		return true
 	end
+
+        if disallowedRanks[self.player:GetUserGroup()] then
+            return false, "You don't have access to this function"
+        elseif isInBuildMode and not self.player:IsAdmin() then
+             return false, "You can't use propcore in PvP"
+        else
+            return true
+        end
 
 	return false, "Only Admins can use this function"
 end
