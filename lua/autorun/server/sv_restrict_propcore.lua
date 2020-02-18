@@ -1,7 +1,31 @@
 -- Propcore is allowed to everyone, but functions in the restrictedFunctions array will be restricted to devotee+ only
 
+local disallowedRanks = {}
+disallowedRanks["user"] = true
+disallowedRanks["regular"] = true
 
-local function adminOnlyCondition( self, ... ) 
+local restrictedFunctions = {
+    "propSpawn(sn)",
+    "propSpawn(en)",
+    "propSpawn(svn)",
+    "propSpawn(evn)",
+    "propSpawn(san)",
+    "propSpawn(ean)",
+    "propSpawn(svan)",
+    "propSpawn(evan)",
+    "seatSpawn(sn)",
+    "seatSpawn(svan)",
+    "setPos(e:v)",
+    "reposition(e:v)",
+    "propManipulate(e:vannn)"
+    --"propBreak(e:)"
+}
+
+local adminOnlyFunctions = {
+    "use(e:)"
+}
+
+local function adminOnlyCondition( self, ... )
     if self.player:IsAdmin() then
         return true
     end
@@ -9,7 +33,7 @@ local function adminOnlyCondition( self, ... )
     return false, "Only Admins can use this function"
 end
 
-local function restrictedCondition( self, ... ) 
+local function restrictedCondition( self, ... )
     local isInBuildMode = self.player:GetNWBool( "CFC_PvP_Mode" ) == false
 
     if disallowedRanks[self.player:GetUserGroup()] then
@@ -39,31 +63,6 @@ local function restrict( signatures, condition )
 end
 
 function restrictPropCoreFunctions()
-    local disallowedRanks = {}
-    disallowedRanks["user"] = true
-    disallowedRanks["regular"] = true
-
-    local restrictedFunctions = {
-        "propSpawn(sn)",
-        "propSpawn(en)",
-        "propSpawn(svn)",
-        "propSpawn(evn)",
-        "propSpawn(san)",
-        "propSpawn(ean)",
-        "propSpawn(svan)",
-        "propSpawn(evan)",
-        "seatSpawn(sn)",
-        "seatSpawn(svan)",
-        "setPos(e:v)",
-        "reposition(e:v)",
-        "propManipulate(e:vannn)"
-        --"propBreak(e:)"
-    }
-
-
-    local adminOnlyFunctions = {
-        "use(e:)"
-    }
 
     restrict( restrictedFunctions, restrictedCondition )
     restrict( adminOnlyFunctions, adminOnlyCondition )
