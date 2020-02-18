@@ -2,21 +2,23 @@ local CATEGORY_NAME = "User Management"
 
 local function handleWhitelistActions( callingPlayer, targetPlayers, should_remove )
     local affected_plys = {}
-    local message = ""
+    local message = "#A added #T to the propcore whitelist"
+
+    if should_remove then
+        message = "#A removed #T from the propcore whitelist"
+    end
 
     for _, ply in pairs( targetPlayers ) do
         local plyWhitelisted = CFCPropcoreRestrict.playerIsWhitelisted( ply )
 
         if plyWhitelisted and should_remove then
             table.insert( affected_plys, ply )
-            message = "#A removed #T from the propcore whitelist"
         elseif plyWhitelisted and not should_remove then
             ULib.tsayError( callingPlayer, ply:Name() .. " is already whitelisted!", true )
         elseif not plyWhitelisted and should_remove then
             ULib.tsayError( callingPlayer, ply:Name() .. " is not whitelisted!", true )
         elseif not plyWhitelisted and not should_remove then
             table.insert( affected_plys, ply )
-            message = "#A added #T to the propcore whitelist"
         end
     end
 
