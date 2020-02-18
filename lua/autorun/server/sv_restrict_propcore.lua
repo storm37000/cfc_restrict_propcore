@@ -65,14 +65,15 @@ function restrictPropCoreFunctions()
             local oldFunc = wire_expression2_funcs[signature][3]
 
             wire_expression2_funcs[signature][3] = function( self, ... )
-                if disallowedRanks[self.player:GetUserGroup()] == nil or CFCPropcoreRestrict.playerIsWhitelisted( self.player ) then
+                if disallowedRanks[self.player:GetUserGroup()] == nil then
+                    if CFCPropcoreRestrict.playerIsWhitelisted( self.player ) then
+                        local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
 
-                    local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
-
-                    if isInBuildMode or self.player:IsAdmin() then
-                        return oldFunc( self, ... )
-                    else
-                        self.player:ChatPrint( "You can't use PropCore in PvP mode" )
+                        if isInBuildMode or self.player:IsAdmin() then
+                            return oldFunc( self, ... )
+                        else
+                            self.player:ChatPrint( "You can't use PropCore in PvP mode" )
+                        end
                     end
                 else
                     self.player:ChatPrint( "You don't have access to " .. signature )
