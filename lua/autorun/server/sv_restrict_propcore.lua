@@ -51,7 +51,7 @@ local function restrict( signatures, condition )
         local oldFunc = wire_expression2_funcs[signature][3]
 
         wire_expression2_funcs[signature][3] = function( self, ... )
-            canRun, reason = condition( self, ... )
+            local canRun, reason = condition( self, ... )
 
             if canRun then
                 return oldFunc( self, ... )
@@ -66,4 +66,3 @@ function restrictPropCoreFunctions()
     restrict( restrictedFunctions, restrictedCondition )
     restrict( adminOnlyFunctions, adminOnlyCondition )
 end
-
