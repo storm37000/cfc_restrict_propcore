@@ -39,9 +39,11 @@ local function restrictedCondition( self, ... )
         return false, "You don't have access to this function"
     end
 
+
     if not isInBuildMode and not self.player:IsAdmin() then
         return false, "you can't use propcore in PvP"
     end
+    
     return true
 end
 
@@ -50,7 +52,7 @@ local function restrict( signatures, condition )
         local oldFunc = wire_expression2_funcs[signature][3]
 
         wire_expression2_funcs[signature][3] = function( self, ... )
-            canRun, reason = condition( self, ... )
+            local canRun, reason = condition( self, ... )
 
             if canRun then
                 return oldFunc( self, ... )
@@ -62,9 +64,6 @@ local function restrict( signatures, condition )
 end
 
 function restrictPropCoreFunctions()
-
     restrict( restrictedFunctions, restrictedCondition )
     restrict( adminOnlyFunctions, adminOnlyCondition )
 end
-
-
