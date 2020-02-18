@@ -58,13 +58,13 @@ end
         	local oldFunc = wire_expression2_funcs[signature][3]
 
         	wire_expression2_funcs[signature][3] = function( self, ... )
-            canRun, reason = condition( self, ... )
+            	canRun, reason = condition( self, ... )
 
-            if canRun then
-                return oldFunc( self, ... )
-            else
-                self.player:ChatPrint( "Couldn't run " .. signature .. ":" .. reason )
-            end
-        end
-    end
-end
+	            if canRun then
+    	            return oldFunc( self, ... )
+        	    else
+            	    self.player:ChatPrint( "Couldn't run " .. signature .. ":" .. reason )
+            	end
+        	end
+    	end
+	end
