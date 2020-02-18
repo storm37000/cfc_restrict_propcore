@@ -37,8 +37,6 @@ PCWhitelistAdd:help( "Adds/Removes specified target(s) to a propcore whitelist" 
 PCWhitelistAdd:setOpposite( "ulx denypropcore", {_, _, true}, "!denypropcore" )
 
 local function isInPropcoreWhitelist( callingPlayer, targetPlayers )
-    local affected_plys = {}
-
     for _, ply in pairs( targetPlayers ) do
         if CFCPropcoreRestrict.playerIsWhitelisted( ply ) then
             ULib.tsayError( callingPlayer, ply:Name() .. " is whitelisted", true )
