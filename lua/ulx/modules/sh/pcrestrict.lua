@@ -1,34 +1,34 @@
 local CATEGORY_NAME = "User Management"
 
-local function handleWhitelistActions( callingPlayer, targetPlayers, should_remove )
-    local affected_plys = {}
+local function handleWhitelistActions( callingPlayer, targetPlayers, shouldRemove )
+    local affectedPlys = {}
     local message = "#A added #T to the propcore whitelist"
 
-    if should_remove then
+    if shouldRemove then
         message = "#A removed #T from the propcore whitelist"
     end
 
     for _, ply in pairs( targetPlayers ) do
         local plyWhitelisted = CFCPropcoreRestrict.playerIsWhitelisted( ply )
 
-        if plyWhitelisted and should_remove then
-            table.insert( affected_plys, ply )
-        elseif plyWhitelisted and not should_remove then
+        if plyWhitelisted and shouldRemove then
+            table.insert( affectedPlys, ply )
+        elseif plyWhitelisted and not shouldRemove then
             ULib.tsayError( callingPlayer, ply:Name() .. " is already whitelisted!", true )
-        elseif not plyWhitelisted and should_remove then
+        elseif not plyWhitelisted and shouldRemove then
             ULib.tsayError( callingPlayer, ply:Name() .. " is not whitelisted!", true )
-        elseif not plyWhitelisted and not should_remove then
-            table.insert( affected_plys, ply )
+        elseif not plyWhitelisted and not shouldRemove then
+            table.insert( affectedPlys, ply )
         end
     end
 
-    if should_remove then
-        CFCPropcoreRestrict.removePlayersFromPropcoreWhitelist( affected_plys )
+    if shouldRemove then
+        CFCPropcoreRestrict.removePlayersFromPropcoreWhitelist( affectedPlys )
     else
-        CFCPropcoreRestrict.addPlayersToPropcoreWhitelist( affected_plys )
+        CFCPropcoreRestrict.addPlayersToPropcoreWhitelist( affectedPlys )
     end
 
-    ulx.fancyLogAdmin( callingPlayer, true, message, affected_plys )
+    ulx.fancyLogAdmin( callingPlayer, true, message, affectedPlys )
 end
 
 local PCWhitelistAdd = ulx.command( CATEGORY_NAME, "ulx allowpropcore", handleWhitelistActions, "!allowpropcore" )
