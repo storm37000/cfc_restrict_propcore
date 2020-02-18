@@ -1,6 +1,6 @@
 local CATEGORY_NAME = "User Management"
 
-local function addToWhitelist( callingPlayer, targetPlayers, should_remove )
+local function handleWhitelistActions( callingPlayer, targetPlayers, should_remove )
     local affected_plys = {}
     local message = ""
 
@@ -29,7 +29,7 @@ local function addToWhitelist( callingPlayer, targetPlayers, should_remove )
     ulx.fancyLogAdmin( callingPlayer, true, message, affected_plys )
 end
 
-local PCWhitelistAdd = ulx.command( CATEGORY_NAME, "ulx allowpropcore", addToWhitelist, "!allowpropcore" )
+local PCWhitelistAdd = ulx.command( CATEGORY_NAME, "ulx allowpropcore", handleWhitelistActions, "!allowpropcore" )
 PCWhitelistAdd:addParam{ type = ULib.cmds.PlayersArg }
 PCWhitelistAdd:addParam{ type = ULib.cmds.BoolArg, invisible = true }
 PCWhitelistAdd:defaultAccess( ULib.ACCESS_ADMIN )
