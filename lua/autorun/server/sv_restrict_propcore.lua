@@ -28,11 +28,11 @@ function restrictPropCoreFunctions()
     }
 
     restrict( restrictedFunctions, function( self,  ... )
-        local isInPvP = self.player:GetNWBool( "CFC_Pvp_Mode" )
+        local isInBuildMode = self.player:GetNWBool( "CFC_Pvp_Mode" ) == false
 
         if disallowedRanks[self.player:GetUserGroup()] then
             return false, "You don't have access to this function"
-        elseif isInPvP == true then
+        elseif isInBuildMode and not self.player:IsAdmin() then
              return false, "You can't use propcore in PvP"
         else
             return true
@@ -55,12 +55,12 @@ function restrict( signatures, condition )
         local oldFunc = wire_expression2_funcs[signature][3]
 
         wire_expression2_funcs[signature][3] = function( self, ... )
-            canRun, err = condition( self, ... )
+            canRun, reason = condition( self, ... )
 
             if canRun then
                 return oldFunc( self, ... )
             else
-                self.player:ChatPrint( err )
+                self.player:ChatPrint( "Couldn't run ".. signature .. ":" .. reason )
             end
         end
     end
