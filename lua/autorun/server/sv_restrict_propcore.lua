@@ -24,7 +24,6 @@ local restrictedFunctions = {
 local adminOnlyFunctions = {
     "use(e:)"
 }
-
 local function adminOnlyCondition( self, ... )
     if self.player:IsAdmin() then
         return true
@@ -40,7 +39,7 @@ local function restrictedCondition( self, ... )
         return false, "You don't have access to this function"
     end
 
-    if isInBuildMode and not self.player:IsAdmin() then
+    if not isInBuildMode and not self.player:IsAdmin() then
         return false, "you can't use propcore in PvP"
     end
     return true
