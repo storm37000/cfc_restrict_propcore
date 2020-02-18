@@ -60,7 +60,7 @@ function restrict( signatures, condition )
             if canRun then
                 return oldFunc( self, ... )
             else
-                self.player:ChatPrint( "Couldn't run ".. signature .. ":" .. reason )
+                self.player:ChatPrint( "Couldn't run " .. signature .. ":" .. reason )
             end
         end
     end
