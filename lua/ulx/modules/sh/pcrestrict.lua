@@ -35,3 +35,20 @@ PCWhitelistAdd:addParam{ type = ULib.cmds.BoolArg, invisible = true }
 PCWhitelistAdd:defaultAccess( ULib.ACCESS_ADMIN )
 PCWhitelistAdd:help( "Adds/Removes specified target(s) to a propcore whitelist" )
 PCWhitelistAdd:setOpposite( "ulx denypropcore", {_, _, true}, "!denypropcore" )
+
+local function isInPropcoreWhitelist( callingPlayer, targetPlayers )
+    local affected_plys = {}
+
+    for _, ply in pairs( targetPlayers ) do
+        if CFCPropcoreRestrict.playerIsWhitelisted( ply ) then
+            ULib.tsayError( callingPlayer, ply:Name() .. " is whitelisted", true )
+        else
+            ULib.tsayError( callingPlayer, ply:Name() .. " is NOT whitelisted!", true )
+        end
+    end
+end
+
+local PCInWhitelist = ulx.command( CATEGORY_NAME, "ulx propcoreexists", isInPropcoreWhitelist, "!propcoreexists" )
+PCInWhitelist:addParam{ type = ULib.cmds.PlayersArg }
+PCInWhitelist:defaultAccess( ULib.ACCESS_ADMIN )
+PCInWhitelist:help( "Checks if a player is in the propcore whitelist" )
