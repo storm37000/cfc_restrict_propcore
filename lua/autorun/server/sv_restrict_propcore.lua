@@ -39,7 +39,6 @@ local function restrictedCondition( self, ... )
         return false, "You don't have access to this function"
     end
 
-
     if not isInBuildMode and not self.player:IsAdmin() then
         return false, "You can't use propcore in PvP"
     end
