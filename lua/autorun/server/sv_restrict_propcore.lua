@@ -25,15 +25,6 @@ local adminOnlyFunctions = {
     "use(e:)"
 }
 
-local function checkForPvP( player )
-    local isInBuildMode = player:GetNWBool( "CFC_PvP_Mode" )
-
-    if not isInBuildMode and not player:IsAdmin() then
-        return false, "You can't use propcore in PvP"
-
-    end
-end
-
 local function restrict( signatures, condition )
     for _, signature in pairs( signatures ) do
         local oldFunc = wire_expression2_funcs[signature][3]
