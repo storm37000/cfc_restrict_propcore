@@ -34,15 +34,10 @@ end
 local function checkForPvP( player )
     local isInBuildMode = player:GetNWBool( "CFC_PvP_Mode" )
 
-    if not isInBuildMode and not self.player:IsAdmin() then
+    if not isInBuildMode and not player:IsAdmin() then
         return false, "You can't use propcore in PvP"
 
     end
-end
-
-local function playerCanRun( self, ... )
-    isAllowedRank( disallowedRanks, self.player )
-    checkForPvP( self.player )
 end
 
 local function restrict( signatures, condition )
@@ -50,10 +45,10 @@ local function restrict( signatures, condition )
         local oldFunc = wire_expression2_funcs[signature][3]
 
         wire_expression2_funcs[signature][3] = function( self, ... )
-            local canRun, reason = condition( self, ... )
+            local canRun, reason = condition( s, ... )
 
             if not canRun then
-                return self.player:ChatPrint( "Couldn't run ".. signature .. ":" .. reason )
+                return s.player:ChatPrint( "Couldn't run " .. signature .. ":" .. reason )
             end
 
             return oldFunc( self, ... )
