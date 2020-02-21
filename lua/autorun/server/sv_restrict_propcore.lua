@@ -1,4 +1,42 @@
 -- Propcore is allowed to everyone, but functions in the restrictedFunctions array will be restricted to devotee+ only
+local cfc_propcore_file_name = "cfc_propcore_whitelist"
+local whitelistedPlayers = whitelistedPlayers or {}
+CFCPropcoreRestrict = CFCPropcoreRestrict or {}
+
+if not file.Exists( cfc_propcore_file_name .. ".txt", "DATA" ) then
+    --Creating new data file
+    file.Write( cfc_propcore_file_name .. ".txt", "" )
+else
+    local fileContents = file.Read( cfc_propcore_file_name .. ".txt" )
+    local translated = util.JSONToTable( fileContents )
+    whitelistedPlayers = translated or {}
+end
+
+local function saveWhitelistChanges()
+    local translated = util.TableToJSON( whitelistedPlayers, true )
+
+    file.Write( cfc_propcore_file_name .. ".txt", translated )
+end
+
+function CFCPropcoreRestrict.addPlayersToPropcoreWhitelist( players )
+    for _, ply in pairs( players ) do
+        whitelistedPlayers[ply:SteamID()] = true
+    end
+
+    saveWhitelistChanges()
+end
+
+function CFCPropcoreRestrict.removePlayersFromPropcoreWhitelist( players )
+    for _, ply in pairs( players ) do
+        whitelistedPlayers[ply:SteamID()] = nil
+    end
+
+    saveWhitelistChanges()
+end
+
+function CFCPropcoreRestrict.playerIsWhitelisted( ply )
+    return whitelistedPlayers[ply:SteamID()] ~= nil
+end
 
 function restrictPropCoreFunctions()
     local disallowedRanks = {}
@@ -27,7 +65,9 @@ function restrictPropCoreFunctions()
             local oldFunc = wire_expression2_funcs[signature][3]
 
             wire_expression2_funcs[signature][3] = function( self, ... )
-                if disallowedRanks[self.player:GetUserGroup()] == nil then
+                local playerWhitelisted = CFCPropcoreRestrict.playerIsWhitelisted( self.player )
+
+                if disallowedRanks[self.player:GetUserGroup()] == nil or playerWhitelisted then
                     local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
 
                     if isInBuildMode or self.player:IsAdmin() then
