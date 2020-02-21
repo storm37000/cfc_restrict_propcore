@@ -25,12 +25,6 @@ local adminOnlyFunctions = {
     "use(e:)"
 }
 
-local function isAllowedRank( ranks, player )
-    if ranks[player:GetUserGroup()] then
-        return false, "You don't have access to this function"
-    end
-end
-
 local function checkForPvP( player )
     local isInBuildMode = player:GetNWBool( "CFC_PvP_Mode" )
 
