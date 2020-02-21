@@ -35,7 +35,8 @@ local function checkForPvP( player )
     local isInBuildMode = player:GetNWBool( "CFC_PvP_Mode" )
 
     if not isInBuildMode and not self.player:IsAdmin() then
-       return false, "You can't use propCore in PvP"
+        return false, "You can't use propcore in PvP"
+
     end
 end
 
