@@ -100,9 +100,9 @@ local function restrict( signatures, condition )
             if not canRun then
                 return s.player:ChatPrint( "Couldn't run " .. signature .. ":" .. reason )
             end
-        end
 
-        return oldFunc( self, ... )
+            return oldFunc( self, ... )
+        end
     end
 end
 
