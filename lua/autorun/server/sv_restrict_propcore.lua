@@ -38,48 +38,75 @@ function CFCPropcoreRestrict.playerIsWhitelisted( ply )
     return whitelistedPlayers[ply:SteamID()] ~= nil
 end
 
-function restrictPropCoreFunctions()
-    local disallowedRanks = {}
-    disallowedRanks["user"] = true
-    disallowedRanks["regular"] = true
+local disallowedRanks = {}
+disallowedRanks["user"] = true
+disallowedRanks["regular"] = true
 
-    local restrictedFunctions = {
-        "propSpawn(sn)",
-        "propSpawn(en)",
-        "propSpawn(svn)",
-        "propSpawn(evn)",
-        "propSpawn(san)",
-        "propSpawn(ean)",
-        "propSpawn(svan)",
-        "propSpawn(evan)",
-        "seatSpawn(sn)",
-        "seatSpawn(svan)",
-        "setPos(e:v)",
-        "reposition(e:v)",
-        "propManipulate(e:vannn)"
-        --"propBreak(e:)"
-    }
+local function isCorrectRank( ply )
+    return not disallowedRanks[ply:GetUserGroup()]
+end
 
-    for _, signature in pairs( restrictedFunctions ) do
-        if wire_expression2_funcs then
-            local oldFunc = wire_expression2_funcs[signature][3]
+local function isInPvp( ply )
+    return ply:GetNWBool("CFC_PvP_Mode", false)
+end
 
-            wire_expression2_funcs[signature][3] = function( self, ... )
-                local playerWhitelisted = CFCPropcoreRestrict.playerIsWhitelisted( self.player )
+-- Conditions 
+local function adminOnlyCondition( self, ... )
+    if self.player:IsAdmin() then
+        return true
+    end
 
-                if disallowedRanks[self.player:GetUserGroup()] == nil or playerWhitelisted then
-                    local isInBuildMode = self.player:GetNWBool("CFC_PvP_Mode", false) == false
+    return false, "Only Admins can use this function"
+end
 
-                    if isInBuildMode or self.player:IsAdmin() then
-                        return oldFunc( self, ... )
-                    else
-                        self.player:ChatPrint( "You can't use PropCore in PvP mode" )
-                    end
-                else
-                    self.player:ChatPrint( "You don't have access to " .. signature )
-                end
+local function restrictedCondition( self, ... )
+    if CFCPropcoreRestrict.playerIsWhitelisted( self.player ) then return true end
+
+    if not isCorrectRank( self.player ) then return false, "Incorrect Rank" end
+    if isInPvp( self.player ) then return false, "Cannot be used in PvP mode" end
+
+    return true
+end
+
+-- Must be correct user, and not in PvP mode
+local restrictedFunctions = {
+    "propSpawn(sn)",
+    "propSpawn(en)",
+    "propSpawn(svn)",
+    "propSpawn(evn)",
+    "propSpawn(san)",
+    "propSpawn(ean)",
+    "propSpawn(svan)",
+    "propSpawn(evan)",
+    "seatSpawn(sn)",
+    "seatSpawn(svan)",
+    "setPos(e:v)",
+    "reposition(e:v)",
+    "propManipulate(e:vannn)"
+    --"propBreak(e:)"
+}
+
+local adminOnlyFunctions = {
+    "use(e:)"
+}
+
+local function restrict( signatures, condition )
+    for _, signature in pairs( signatures ) do
+        local oldFunc = wire_expression2_funcs[signature][3]
+
+        wire_expression2_funcs[signature][3] = function( self, ... )
+            local canRun, reason = condition( s, ... )
+
+            if not canRun then
+                return s.player:ChatPrint( "Couldn't run " .. signature .. ":" .. reason )
             end
+
+            return oldFunc( self, ... )
         end
     end
 end
 
+function restrictPropCoreFunctions()
+    restrict( restrictedFunctions, restrictedCondition )
+    restrict( adminOnlyFunctions, adminOnlyCondition )
+end
