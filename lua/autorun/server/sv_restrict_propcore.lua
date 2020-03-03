@@ -87,8 +87,7 @@ local restrictedFunctions = {
     "use(e:)"
 }
 
-local adminOnlyFunctions = {
-}
+local adminOnlyFunctions = {}
 
 local function restrict( signatures, condition )
     for _, signature in pairs( signatures ) do
