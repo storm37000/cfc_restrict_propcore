@@ -84,10 +84,10 @@ local restrictedFunctions = {
     "reposition(e:v)",
     "propManipulate(e:vannn)"
     --"propBreak(e:)"
+    "use(e:)"
 }
 
 local adminOnlyFunctions = {
-    "use(e:)"
 }
 
 local function restrict( signatures, condition )
