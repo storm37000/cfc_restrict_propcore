@@ -82,20 +82,19 @@ local restrictedFunctions = {
     "seatSpawn(svan)",
     "setPos(e:v)",
     "reposition(e:v)",
-    "propManipulate(e:vannn)"
+    "propManipulate(e:vannn)",
     --"propBreak(e:)"
-}
-
-local adminOnlyFunctions = {
     "use(e:)"
 }
+
+local adminOnlyFunctions = {}
 
 local function restrict( signatures, condition )
     for _, signature in pairs( signatures ) do
         local oldFunc = wire_expression2_funcs[signature][3]
 
         wire_expression2_funcs[signature][3] = function( self, ... )
-            local canRun, reason = condition( s, ... )
+            local canRun, reason = condition( self, ... )
 
             if not canRun then
                 return s.player:ChatPrint( "Couldn't run " .. signature .. ":" .. reason )
