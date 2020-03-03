@@ -94,7 +94,7 @@ local function restrict( signatures, condition )
         local oldFunc = wire_expression2_funcs[signature][3]
 
         wire_expression2_funcs[signature][3] = function( self, ... )
-            local canRun, reason = condition( s, ... )
+            local canRun, reason = condition( self, ... )
 
             if not canRun then
                 return s.player:ChatPrint( "Couldn't run " .. signature .. ":" .. reason )
