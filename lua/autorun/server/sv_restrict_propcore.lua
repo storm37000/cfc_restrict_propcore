@@ -82,7 +82,7 @@ local restrictedFunctions = {
     "seatSpawn(svan)",
     "setPos(e:v)",
     "reposition(e:v)",
-    "propManipulate(e:vannn)"
+    "propManipulate(e:vannn)",
     --"propBreak(e:)"
     "use(e:)"
 }
