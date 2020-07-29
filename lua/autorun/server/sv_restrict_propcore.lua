@@ -40,7 +40,6 @@ end
 
 local disallowedRanks = {}
 disallowedRanks["user"] = true
-disallowedRanks["regular"] = true
 
 local function isCorrectRank( ply )
     return not disallowedRanks[ply:GetUserGroup()]
