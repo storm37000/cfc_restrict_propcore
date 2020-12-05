@@ -49,7 +49,7 @@ local function isInPvp( ply )
     return ply:GetNWBool("CFC_PvP_Mode", false)
 end
 
--- Conditions 
+-- Conditions
 local function adminOnlyCondition( self, ... )
     if self.player:IsAdmin() then
         return true
@@ -59,10 +59,12 @@ local function adminOnlyCondition( self, ... )
 end
 
 local function restrictedCondition( self, ... )
-    if CFCPropcoreRestrict.playerIsWhitelisted( self.player ) then return true end
+    if self.player:IsAdmin() then return true end
 
-    if not isCorrectRank( self.player ) then return false, "Incorrect Rank" end
     if isInPvp( self.player ) then return false, "Cannot be used in PvP mode" end
+
+    if CFCPropcoreRestrict.playerIsWhitelisted( self.player ) then return true end
+    if not isCorrectRank( self.player ) then return false, "Incorrect Rank" end
 
     return true
 end
