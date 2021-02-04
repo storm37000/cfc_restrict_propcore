@@ -45,10 +45,6 @@ local function isCorrectRank( ply )
     return not disallowedRanks[ply:GetUserGroup()]
 end
 
-local function isInPvp( ply )
-    return ply:GetNWBool("CFC_PvP_Mode", false)
-end
-
 -- Conditions
 local function adminOnlyCondition( self, ... )
     if self.player:IsAdmin() then
@@ -59,9 +55,10 @@ local function adminOnlyCondition( self, ... )
 end
 
 local function restrictedCondition( self, ... )
-    if self.player:IsAdmin() then return true end
+    local canUse, message = hook.Run( "CFC_RestrictPropCore_CanUse", self.player, self )
+    if canUse ~= nil then return canUse, message end
 
-    if isInPvp( self.player ) then return false, "Cannot be used in PvP mode" end
+    if self.player:IsAdmin() then return true end
 
     if CFCPropcoreRestrict.playerIsWhitelisted( self.player ) then return true end
     if not isCorrectRank( self.player ) then return false, "Incorrect Rank" end

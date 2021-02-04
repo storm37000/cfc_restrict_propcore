@@ -1,4 +1,4 @@
-E2Lib.RegisterExtension( "cfc_propcore_restrictions", true, "Rank and pvp based restrictions for propcore")
+E2Lib.RegisterExtension( "cfc_propcore_restrictions", true, "Rank based restrictions for propcore")
 
 registerCallback("postinit", restrictPropCoreFunctions)
 
