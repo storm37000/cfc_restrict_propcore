@@ -93,7 +93,14 @@ registerCallback("postinit", function()
 			"vonEncode(t)",
 			"vonEncode(s)",
 			"vonDecode(s)",
-			"vonDecodeTable(s)"
+			"vonDecodeTable(s)",
+			"jsonDecode(s)",
+			"jsonEncode(t)",
+			"jsonEncode(tn)",
+			"holoScale(nv)",
+			"holoBoneScale(nnv)",
+			"holoBoneScale(nsv)",
+			"holoScaleUnits(nv)"
 		},restrictedRate)
 		restrict({
 			"propSpawn(sn)",
@@ -109,10 +116,7 @@ registerCallback("postinit", function()
 			"propBreak(e:)",
 			"deparent(e:)",
 			"propDraw(e:n)",
-			"use(e:)",
-			"jsonDecode(s)",
-			"jsonEncode(t)",
-			"jsonEncode(tn)"
+			"use(e:)"
 		},adminOnlyCondition)
 --	end)
 end)
