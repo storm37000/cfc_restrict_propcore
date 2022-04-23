@@ -12,30 +12,24 @@ local function isCorrectRank( ply )
 end
 
 local function setLastUse( chip, funcName )
-	local ply = chip.player
 
-	local throttles = ply.streamcoreThrottle
-	if not throttles then
-		throttles = {}
-		ply.streamcoreThrottle = throttles
+	if not chip.streamcoreThrottle then
+		chip.streamcoreThrottle = {}
 	end
 
-	throttles[funcName] = CurTime()
+	chip.streamcoreThrottle[funcName] = CurTime()
 end
 
 local function isThrottled( chip, funcName )
-	local ply = chip.player
 
-	local throttles = ply.streamcoreThrottle
-	if not throttles then
-		throttles = {}
-		ply.streamcoreThrottle = throttles
+	if not chip.streamcoreThrottle then
+		chip.streamcoreThrottle = {}
 	end
 
-	local lastUse = throttles[funcName]
+	local lastUse = chip.streamcoreThrottle[funcName]
 	if not lastUse then
 		lastUse = 0
-		throttles[funcName] = 0
+		chip.streamcoreThrottle[funcName] = 0
 	end
 
 	local delay = throttleConfig[funcName] or throttleConfig.default
@@ -87,8 +81,8 @@ registerCallback("postinit", function()
 		--restrict( restrictedFunctions, restrictedCondition )
 		restrict({
 			"soundDuration(s)",
-			"setTrails(e:nnnsvn)",
-			"setTrails(e:nnnsvnnn)",
+			--"setTrails(e:nnnsvn)",
+			--"setTrails(e:nnnsvnnn)",
 			"vonEncode(r)",
 			"vonEncode(t)",
 			"vonEncode(s)",
@@ -96,11 +90,11 @@ registerCallback("postinit", function()
 			"vonDecodeTable(s)",
 			"jsonDecode(s)",
 			"jsonEncode(t)",
-			"jsonEncode(tn)",
-			"holoScale(nv)",
-			"holoBoneScale(nnv)",
-			"holoBoneScale(nsv)",
-			"holoScaleUnits(nv)"
+			"jsonEncode(tn)"
+			--"holoScale(nv)",
+			--"holoBoneScale(nnv)",
+			--"holoBoneScale(nsv)",
+			--"holoScaleUnits(nv)"
 		},restrictedRate)
 		restrict({
 			"propSpawn(sn)",
@@ -114,7 +108,7 @@ registerCallback("postinit", function()
 			"seatSpawn(sn)",
 			"seatSpawn(svan)",
 			"propBreak(e:)",
-			"deparent(e:)",
+			--"deparent(e:)",
 			"propDraw(e:n)",
 			"use(e:)"
 		},adminOnlyCondition)
