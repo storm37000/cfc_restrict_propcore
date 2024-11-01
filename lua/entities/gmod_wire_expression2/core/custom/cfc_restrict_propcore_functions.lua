@@ -1,15 +1,14 @@
 E2Lib.RegisterExtension( "cfc_propcore_restrictions", true, "Rank and pvp based restrictions for propcore")
 
-local disallowedRanks = {}
+local allowedRanks = {
+	"Owner",
+	"Superadmin"
+}
 
 -- In seconds, minimum delay between uses
 local throttleConfig = {
 	default = 0.1
 }
-
-local function isCorrectRank( ply )
-	return not disallowedRanks[ply:GetUserGroup()], "Incorrect rank to use this function"
-end
 
 local function setLastUse( chip, funcName )
 
@@ -41,16 +40,17 @@ end
 local function adminOnlyCondition( self )
 	if self.player:IsAdmin() then
 		return true
+	else
+		return false, "Only Admins can use this function"
 	end
-
-	return false, "Only Admins can use this function"
 end
 
 local function restrictedCondition( self )
-	if self.player:IsAdmin() then return true end
-	if not isCorrectRank( self.player ) then return false, "Incorrect Rank" end
-
-	return true
+	if allowedRanks[ply:GetUserGroup()] then
+		return true
+	else
+		return false, "Incorrect rank to use this function"
+	end
 end
 
 local function restrictedRate( self, funcName )
@@ -78,7 +78,7 @@ end
 
 registerCallback("postinit", function()
 --	timer.Simple(4,function()
-		--restrict( restrictedFunctions, restrictedCondition )
+		--restrict({},restrictedCondition )
 		restrict({
 			"soundDuration(s)",
 			--"setTrails(e:nnnsvn)",
